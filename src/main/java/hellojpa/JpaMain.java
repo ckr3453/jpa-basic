@@ -18,9 +18,6 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setName("홍길동");
-            em.persist(member);
             // 1. EntityManager를 통해 객체(DB) 찾기, 삭제 등
 //            Member findMember = em.find(Member.class, 1L); // 가져오는 순간 em이 관리하기 시작함.
 //            System.out.println("member = " + findMember.getId());
@@ -31,14 +28,35 @@ public class JpaMain {
             // 클래스(엔티티) 객체를 대상으로 쿼리를 짤 수 있음. (객체 지향 쿼리 언어를 제공함)
             // DB별 쿼리 방언을 신경쓰지 않아도 됨 (SQL 문으로 자동 변환)
             // 조건이 들어간 검색 쿼리가 문제임 (동적 쿼리)
-            List<Member> members = em.createQuery("select m from Member m", Member.class)
-                    .setFirstResult(3)
-                    .setMaxResults(5)
-                    .getResultList();
+//            List<Member> members = em.createQuery("select m from Member m", Member.class)
+//                    .setFirstResult(3)
+//                    .setMaxResults(5)
+//                    .getResultList();
+//
+//            for(Member m : members){
+//                System.out.println("member = " + m.getName());
+//            }
+//===========================================================================================
+            // 비영속 (한번도 영속상태가 되지 않음)
+            Member member = new Member();
+            member.setName("홍길동");
 
-            for(Member m : members){
-                System.out.println("member = " + m.getName());
-            }
+            // 영속 (entityManager에 의해 영속성 컨텍스트에 저장 및 관리)
+            // 영속성 컨텍스트 내 1차 캐시에 저장됨. (key-value로 key는 @id 값이되고 value는 해당 엔티티 객체가 됨)
+            // 여기서 말하는 1차 캐시는 em을 생성한 시점의 트랜잭션 에서만 존재함
+            // 이후 해당 엔티티를 영속성 컨텍스트에서 호출할 때 1차 캐시에서 먼저 호출함 (쿼리 호출x)
+            em.persist(member);
+
+            Member member1 = em.find(Member.class, 1L);
+            System.out.println("member1 = " + member1);
+
+            // 준영속 (한번 영속 상태가 되었다가 분리된 상태)
+//            em.detach(member);
+
+            // 제거
+//            em.remove(member);
+// ==========================================================================================
+
 
             tx.commit();
         } catch (Exception e){
