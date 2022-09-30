@@ -1,9 +1,8 @@
 package hellojpa;
 
-import entity.Member;
+import entity.MemberTest;
 
 import javax.persistence.*;
-import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -88,7 +87,7 @@ public class JpaMain {
             * 3. JPQL 쿼리 실행시 플러시 자동 호출
             * */
 
-            Member member = new Member();
+            MemberTest member = new MemberTest();
             member.setName("홍길동");
 
             em.persist(member);
