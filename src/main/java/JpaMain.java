@@ -1,5 +1,3 @@
-package hellojpa;
-
 import entity.MemberTest;
 
 import javax.persistence.*;
